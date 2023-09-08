@@ -1,6 +1,7 @@
 import React from 'react'
-import { Navigate, useRoutes } from 'react-router-dom'
-import Auth from './auth'
+import { Navigate, useRoutes, Routes, Route } from 'react-router-dom'
+import Auth from './Auth'
+import BaseLayout from '../layouts/BaseLayout'
 
 // 懒加载
 const lazyload = (path: string) => {
@@ -26,6 +27,17 @@ const baseRoutes: Record<string, any>[] = [
   {
     path: '/user',
     element: lazyloadAuth('/user'),
+  },
+  {
+    path: '/layout',
+    redirect: '/layout/home',
+    element: <BaseLayout></BaseLayout>,
+    children: [
+      {
+        path: '/layout/home',
+        element: lazyloadAuth('/home')
+      }
+    ]
   }
 ]
 
@@ -40,9 +52,22 @@ const routes: Record<string, any>[] = [
   { path: "*", element: <Navigate to="/404" /> },
 ]
 
+// 支持重定向
+function Redirect () {
+}
+
 // 使用配置式路由
 function Router () {
-  return useRoutes(routes)
+  return (
+    <>
+      {/* 支持所有路由 */}
+      { useRoutes(routes) }
+      {/* 支持重定向配置 */}
+      <Routes>
+        <Route path='/layout' element={<Navigate to='/layout/home' />} />
+      </Routes>
+    </>
+  )
 }
 
 // 导出

@@ -1,6 +1,6 @@
 import './index.less'
 
-const view = () => {
+const Component = () => {
   return (
     <div className='page-view'>
       <div className='title'>用户</div>
@@ -8,4 +8,4 @@ const view = () => {
   )
 }
 
-export default view
+export default Component
