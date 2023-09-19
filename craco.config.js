@@ -24,7 +24,7 @@ module.exports = {
       '@': path.resolve(__dirname, 'src')
     }
   },
-  //配置代理解决跨域
+  // 配置代理解决跨域
   devServer: {
     proxy: {
       '/api': {
