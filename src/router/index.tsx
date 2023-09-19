@@ -1,11 +1,13 @@
 import React from 'react'
-import { Navigate, useRoutes, Routes, Route } from 'react-router-dom'
-import Auth from './Auth'
-import BaseLayout from '../layouts/BaseLayout'
+import { Navigate } from 'react-router-dom'
+import BeforeEach from './BeforeEach'
+import ExRouter from './ExRouter'
 
 // 懒加载
 const lazyload = (path: string) => {
-  let Component=React.lazy(()=>{return import (`@/views${path}`)})
+  // 加载组件
+  let Component=React.lazy(()=>{return import (`@/${path}`)})
+  // 返回渲染
   return (
     <React.Suspense fallback={<>请等待·····</>}>
       <Component />
@@ -13,29 +15,31 @@ const lazyload = (path: string) => {
   )
 }
 
-// 懒加载（权限校验）
-const lazyloadAuth = (path: string) => {
-  return (<Auth>{ lazyload(path) }</Auth>)
-}
-
 // 基础路由
 const baseRoutes: Record<string, any>[] = [
   {
     path: '/home',
-    element: lazyloadAuth('/home'),
+    element: lazyload('views/home'),
   },
   {
     path: '/user',
-    element: lazyloadAuth('/user'),
+    element: lazyload('views/user'),
   },
   {
     path: '/layout',
     redirect: '/layout/home',
-    element: <BaseLayout></BaseLayout>,
+    element: lazyload('layouts/BaseLayout'),
     children: [
       {
         path: '/layout/home',
-        element: lazyloadAuth('/home')
+        redirect: '/layout/home/home1',
+        element: lazyload('views/home'),
+        children: [
+          {
+            path: '/layout/home/home1',
+            element: lazyload('views/home')
+          }
+        ]
       }
     ]
   }
@@ -52,21 +56,12 @@ const routes: Record<string, any>[] = [
   { path: "*", element: <Navigate to="/404" /> },
 ]
 
-// 支持重定向
-function Redirect () {
-}
-
-// 使用配置式路由
+// 加载配置式路由
 function Router () {
   return (
-    <>
-      {/* 支持所有路由 */}
-      { useRoutes(routes) }
-      {/* 支持重定向配置 */}
-      <Routes>
-        <Route path='/layout' element={<Navigate to='/layout/home' />} />
-      </Routes>
-    </>
+    <BeforeEach>
+      <ExRouter routes={routes}></ExRouter>
+    </BeforeEach>
   )
 }
 
