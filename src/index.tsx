@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals'
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-  // 严格模式会使函数组件在开发环境每次执行两次
+  // 严格模式会使函数组件在开发环境每次执行两次，可以判断一下开发环境是否启用
   <React.StrictMode>
     <App />
   </React.StrictMode>
