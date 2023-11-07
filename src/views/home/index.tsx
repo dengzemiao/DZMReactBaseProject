@@ -1,6 +1,6 @@
 import './index.less'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { getDemo } from '@/api/request'
 
 const Component = () => {
@@ -27,6 +27,7 @@ const Component = () => {
     <div className='page-view'>
       <div className='title'>首页</div>
       <button onClick={touchJump}>跳转 /layout</button>
+      <Link to='/user'>跳转 /user</Link>
       <div>{ JSON.stringify(detail) }</div>
     </div>
   )
