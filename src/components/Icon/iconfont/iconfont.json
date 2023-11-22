@@ -1,0 +1,65 @@
+{
+  "id": "3892482",
+  "name": "云想组件库",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "34121345",
+      "name": "左箭头",
+      "font_class": "zuojiantou",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "34121063",
+      "name": "warning",
+      "font_class": "warning",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "34120654",
+      "name": "Combined Shape",
+      "font_class": "a-CombinedShape",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "34120762",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "34120334",
+      "name": "upload",
+      "font_class": "upload",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "34119913",
+      "name": "右箭头",
+      "font_class": "youjiantou1",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "34119777",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "34119322",
+      "name": "camera",
+      "font_class": "camera",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    }
+  ]
+}

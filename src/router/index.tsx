@@ -1,7 +1,10 @@
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+import { ExRouteObject } from './ExRouter'
+import { Navigate, Outlet } from 'react-router-dom'
 import BeforeEach from './BeforeEach'
 import ExRouter from './ExRouter'
+import logo from '@/assets/logo.svg'
+import './index.less'
 
 // 懒加载
 const lazyload = (path: string) => {
@@ -15,8 +18,97 @@ const lazyload = (path: string) => {
   )
 }
 
-// 基础路由
-const baseRoutes: Record<string, any>[] = [
+// 菜单路由（path 无值菜单不展示该路由，等同于 hidden 属性，path 会作为 菜单Item key 使用）
+export const menuRoute: ExRouteObject = {
+  path: '/layout',
+  redirect: '/layout/home',
+  element: lazyload('layouts/BaseLayout'),
+  children: [
+    {
+      path: '/layout/home',
+      redirect: '/layout/home/home1',
+      title: '首页',
+      icon: 'UploadOutlined',
+      element: <Outlet />,
+      children: [
+        {
+          path: '/layout/home/home1',
+          element: lazyload('views/home'),
+          title: '子菜单1',
+          icon: logo,
+          iconType: 2
+        },
+        {
+          path: '/layout/home/home2',
+          element: lazyload('views/home'),
+          title: '子菜单2',
+          icon: 'icon-a-CombinedShape',
+          iconType: 3
+        }
+      ]
+    },
+    {
+      path: '/layout/home2',
+      redirect: '/layout/home2/home1',
+      title: '首页2',
+      icon: logo,
+      iconType: 2,
+      iconClass: 'iconClassTest',
+      element: <Outlet />,
+      children: [
+        {
+          path: '/layout/home2/home1',
+          element: lazyload('views/home'),
+          title: '子菜单1',
+          icon: logo,
+          iconType: 2
+        },
+        {
+          path: '/layout/home2/home2',
+          element: lazyload('views/home'),
+          title: '子菜单2',
+          icon: 'icon-a-CombinedShape',
+          iconType: 3
+        },
+        {
+          path: '/layout/home2/home3',
+          element: lazyload('views/home'),
+          title: '子菜单3',
+          icon: 'UploadOutlined',
+          hidden: true
+        }
+      ]
+    },
+    {
+      path: '/layout/home3',
+      redirect: '/layout/home3/home1',
+      title: '首页3',
+      icon: require('@/assets/dzm.jpg'),
+      iconType: 2,
+      element: <Outlet />,
+      children: [
+        {
+          path: '/layout/home3/home1',
+          element: lazyload('views/home'),
+          title: '子菜单1',
+          icon: logo,
+          iconType: 2
+        },
+        {
+          path: '/layout/home3/home2',
+          element: lazyload('views/home'),
+          title: '子菜单2',
+          icon: 'icon-a-CombinedShape',
+          iconType: 3
+        }
+      ]
+    }
+  ]
+}
+
+// 路由列表
+const routes: Record<string, any>[] = [
+  menuRoute,
   {
     path: '/home',
     element: lazyload('views/home'),
@@ -25,29 +117,6 @@ const baseRoutes: Record<string, any>[] = [
     path: '/user',
     element: lazyload('views/user'),
   },
-  {
-    path: '/layout',
-    redirect: '/layout/home',
-    element: lazyload('layouts/BaseLayout'),
-    children: [
-      {
-        path: '/layout/home',
-        redirect: '/layout/home/home1',
-        element: lazyload('views/home'),
-        children: [
-          {
-            path: '/layout/home/home1',
-            element: lazyload('views/home')
-          }
-        ]
-      }
-    ]
-  }
-]
-
-// 路由列表
-const routes: Record<string, any>[] = [
-  ...baseRoutes,
   {
     path: "/404",
     element: (<>页面地址不存在</>),

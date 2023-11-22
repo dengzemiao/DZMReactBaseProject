@@ -28,6 +28,9 @@ const Component = () => {
       <div className='title'>首页</div>
       <button onClick={touchJump}>跳转 /layout</button>
       <Link to='/user'>跳转 /user</Link>
+      <Link to='/layout'>跳转 /layout</Link>
+      <Link to='/layout/home2/home1'>跳转 /layout/home2/home1</Link>
+      <Link to='/layout/home2/home3'>跳转 /layout/home2/home3 隐藏的菜单路径</Link>
       <div>{ JSON.stringify(detail) }</div>
     </div>
   )

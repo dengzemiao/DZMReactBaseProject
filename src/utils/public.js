@@ -34,18 +34,18 @@ const Pub = {
     return str.replace(/\s/g, '')
   },
 
-  // 删除字符串左右空格
-  STRING_SPACE_LR(str) {
+  // 删除字符串头尾空格
+  STRING_SPACE_HF(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '')
   },
 
-  // 删除字符串左边空格
-  STRING_SPACE_L(str) {
+  // 删除字符串头部空格
+  STRING_SPACE_H(str) {
     return str.replace(/(^\s*)/g, '')
   },
 
-  // 删除字符串右边空格
-  STRING_SPACE_R(str) {
+  // 删除字符串尾部空格
+  STRING_SPACE_F(str) {
     return str.replace(/(\s*$)/g, '')
   },
 
@@ -189,16 +189,10 @@ const Pub = {
   IS_DEBUG() {
     // 当前 host
     const host = window.location.host
-    // 域名中包含指定标识，为测试环境
-    // if (host.includes('localhost') || host.includes('test.')) {
-    // 不等于正式域名，为测试环境
-    if (host !== 'task.hepai.video') {
-      // 调试环境
-      return true
-    } else {
-      // 线上环境
-      return false
-    }
+    // 方式一：域名中包含指定标识，为测试环境
+    return host.includes('localhost') || host.includes('test.')
+    // 方式二：不等于正式域名，为测试环境
+    // return host !== 'task.hepai.video'
   },
 
   // (获取 || 设置) token
