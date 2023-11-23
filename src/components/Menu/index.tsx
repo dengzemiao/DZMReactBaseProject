@@ -1,9 +1,11 @@
+import React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { Menu, MenuProps as OldMenuProps } from 'antd'
 import { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useLocation, Location } from 'react-router'
 import { useNavigate, NavigateFunction } from 'react-router-dom'
 import { ExRouteObject } from '@/router/ExRouter'
+import { IconType } from '@/components/Icon'
 import MenuIcon from './Icon'
 
 /**
@@ -39,11 +41,59 @@ export enum MenuRouteOpenKeyCollapseType {
 }
 
 /**
+ * @description: 菜单属性
+ */
+export interface MenuItemTypeProps {
+  /**
+   * @description: 菜单名称
+   */
+  label?: React.ReactNode,
+  /**
+   * @description: 默认 icon，根据 iconType 传入不同的值
+   */ 
+  icon?: React.ReactNode,
+  /**
+   * @description: 选中 icon，根据 iconType 传入不同的值， MenuProps 的 iconSwitch 为 true 时生效
+   */
+  sicon?: React.ReactNode,
+  /**
+   * @description: 默认 icon 类型，如果 icon 使用组件则会失效，保证优先展示传入内容
+   */  
+  iconType?: IconType,
+  /**
+   * @description: 选中 icon 类型，如果 icon 使用组件则会失效，保证优先展示传入内容，如果两种 icon 类型一致，只配置默认类型即可，设置 MenuProps 的 iconSwitch 为 true 时生效
+   */  
+  siconType?: IconType,
+  /**
+   * @description: icon 自定义样式
+   */  
+  iconClass?: string
+  /**
+   * @description: 在菜单中不展示，默认展示
+   */
+  hidden?: boolean,
+  /**
+   * @description: 菜单子列表
+   */  
+  children: MenuItemType[]
+}
+
+/**
+ * @description: 扩展菜单 ItemType
+ * @return {*}
+ */
+export type MenuItemType<T extends ItemType = ItemType> = T | MenuItemTypeProps
+
+/**
  * @description: 扩展菜单类型
  */
-export interface MenuProps extends OldMenuProps {
+export interface MenuProps extends Omit<OldMenuProps, 'items'> {
   /**
-   * @description: 路由列表，将会转成 items 接收的数据，注意：props.items 外部传值会覆盖路由列表转换的 items
+   * @description: 菜单列表
+   */  
+  items?: MenuItemType[],
+  /**
+   * @description: 路由列表，会转成菜单列表，优先使用菜单列表
    */  
   routes?: ExRouteObject[],
   /**
@@ -70,12 +120,18 @@ export interface MenuProps extends OldMenuProps {
    * @description: 延迟设置展开层级，在初始化展开文件夹时，有可能会发生一瞬间的卡顿，可以通过等渲染完成在进行设置展开达到效果丝滑过度
    * @default: 0
    */ 
-  openKeysDelayTime?: number
+  openKeysDelayTime?: number,
+  /**
+   * @description: 支持 item | route 中的选中 icon 生效
+   * @default: true
+   */  
+  iconSwitch?: boolean
 }
 
 const Component = (props: MenuProps) => {
   // 默认值
   const {
+    iconSwitch = true,
     openKeysDelayTime = 0,
     routeHiddenCollapseType = MenuRouteHiddenCollapseType.open,
     routeOpenKeyCollapseType = MenuRouteOpenKeyCollapseType.stacking
@@ -97,11 +153,15 @@ const Component = (props: MenuProps) => {
     return newProps
   })
   // 菜单列表
-  const [items, setItems] = useState<ItemType[] | undefined>(undefined)
-  // 选中菜单
-  const [selectedKeys, setSelectedKeys] = useState<string[] | undefined>(undefined)
+  const [items, setItems] = useState<MenuItemType[] | undefined>(undefined)
   // 展开菜单
-  const [openKeys, setOpenKeys] = useState<string[] | undefined>(undefined)
+  const [openKeys, setOpenKeys] = useState<string[] | undefined>(() => {
+    return props.defaultOpenKeys
+  })
+  // 选中菜单
+  const [selectedKeys, setSelectedKeys] = useState<string[] | undefined>(() => {
+    return props.defaultSelectedKeys
+  })
   // 当前路由映射的菜单层级
   const menuMatched = useCallback((routes: Record<string, any>[], location: Location): Record<string, any>[] => {
     // 路由匹配
@@ -153,10 +213,10 @@ const Component = (props: MenuProps) => {
         // 有子列表
         if (item.children && item.children.length) {
           // 展开
-          openkeys.push(item.path!)
+          if (item.path) { openkeys.push(item.path) }
         } else {
           // 选中
-          selectkeys.push(item.path!)
+          if (item.path) { selectkeys.push(item.path) }
           // 取得状态
           routeHidden = !!item.hidden
         }
@@ -211,7 +271,7 @@ const Component = (props: MenuProps) => {
         setOpenKeys(props.openKeys || openKeys)
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     props.items,
     props.routes,
@@ -221,26 +281,31 @@ const Component = (props: MenuProps) => {
     location
   ])
   // 转换为 items
-  const convertItems = useCallback((routes: ExRouteObject[]):  ItemType[] => {
-    // 路由菜单列表
-    const routeItems: ItemType[] = []
+  const convertItems = useCallback((items: ExRouteObject[] | MenuItemType[], skeys?: string[], iconSwitch?: boolean):  MenuItemType[] => {
+    // 菜单列表
+    const newItems: MenuItemType[] = []
+    const selectKeys: string[] = skeys || []
     // 便利
-    routes.forEach((route: ExRouteObject) => {   
-      // path 有值 && 菜单不隐藏
-      if (route.path && !route.hidden) {
+    items.forEach((item: any) => {   
+      // 菜单不隐藏
+      if (!item.hidden) {
         // 组装
-        const routeItem: ItemType = {
-          key: route.path!,
-          icon: <MenuIcon src={route.icon} className={route.iconClass} type={route.iconType} />,
-          label: route.title || route.path,
-          children: route.children && route.children.length ? convertItems(route.children) : undefined
+        const key: string = item.key || item.path || ''
+        const isExist: boolean = selectKeys.includes(key)
+        const icon: any = iconSwitch && item.sicon ? (isExist ? item.sicon : item.icon) : item.icon
+        const iconType: IconType = iconSwitch && item.siconType ? (isExist ? item.siconType : item.iconType) : item.iconType
+        const newItem: MenuItemType = {
+          key: key,
+          label: item.label || item.path,
+          icon: typeof(icon) === 'string' ? <MenuIcon src={icon} type={iconType} className={item.iconClass} /> : icon,
+          children: item.children && item.children.length ? convertItems(item.children, skeys, iconSwitch) : undefined
         }
         // 加入
-        routeItems.push(routeItem)
+        newItems.push(newItem)
       }
     })
     // 返回
-    return routeItems
+    return newItems
   }, [])
   // 展开/关闭的回调
   const onOpenChange = (openKeys: string[]) => {
@@ -265,25 +330,30 @@ const Component = (props: MenuProps) => {
     // 回传
     if (props.onDeselect) { props.onDeselect(info) }
   }
-  // 处理 items
+  // 匹配选中处理
   useEffect(() => {
-    // 优先使用 items
-    if (props.items) {
-      // 外部 items 有传值
-      setItems(props.items)
-    } else if (!props.items && props.routes && props.routes.length) {
-      // 外部 items 没有传值 && 菜单路由有值
-      setItems(convertItems(props.routes))
-    }
-  }, [props.items, props.routes, convertItems])
-  // 处理路由匹配
-  useEffect(() => {
+    // 展开 | 选中
     menuMatchedHandler()
   }, [menuMatchedHandler])
+  // 处理 items
+  useEffect(() => {
+    // 设置选中
+    setItems(convertItems(props.items || props.routes || [], openKeys?.concat(selectedKeys || []), iconSwitch))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.items, props.routes, convertItems])
+  // 处理 items
+  useEffect(() => {
+    // 开启了选中开关
+    if (iconSwitch) {
+      // 设置选中
+      setItems(convertItems(props.items || props.routes || [], openKeys?.concat(selectedKeys || []), iconSwitch))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedKeys, openKeys, iconSwitch, convertItems])
   // 渲染
   return <Menu
     {...menuProps}
-    items={items}
+    items={items as ItemType[]}
     selectedKeys={selectedKeys}
     openKeys={openKeys}
     onOpenChange={onOpenChange}

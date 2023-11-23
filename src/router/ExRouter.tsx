@@ -1,32 +1,12 @@
 // 基于 react-router-dom@6.15.0 封装
 import { useRoutes, Navigate, RouteObject, IndexRouteObject, NonIndexRouteObject } from 'react-router-dom'
 import { useLocation, Location } from 'react-router'
-import { IconType } from '@/components/Icon'
+import { MenuItemTypeProps } from '@/components/Menu'
 
 /**
  * @description: 扩展属性
  */
-interface ExRouteObjectProps {
-  /**
-   * @description: 菜单名称
-   */
-  title?: string
-  /**
-   * @description: 根据 iconType 传入不同的值
-   */ 
-  icon?: any,
-  /**
-   * @description: icon 类型
-   */  
-  iconType?: IconType,
-  /**
-   * @description: icon 自定义样式
-   */  
-  iconClass?: string
-  /**
-   * @description: 在菜单中不展示，默认展示
-   */
-  hidden?: boolean,
+interface ExRouteObjectProps extends Omit<MenuItemTypeProps, 'children'> {
   /**
    * @description: 重定向路由地址
    */

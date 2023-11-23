@@ -5,7 +5,7 @@ import './iconfont/iconfont.css'
  */
 export type IconProps = {
   /**
-   * @description: Icon 名称
+   * @description: Icon 名称，取 iconfont 图标的 font class 作为图标展示
    */
   name: string,
   /**

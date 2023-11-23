@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 import BeforeEach from './BeforeEach'
 import ExRouter from './ExRouter'
 import logo from '@/assets/logo.svg'
+import MenuIcon from '@/components/Menu/Icon'
 import './index.less'
 
 // 懒加载
@@ -27,21 +28,24 @@ export const menuRoute: ExRouteObject = {
     {
       path: '/layout/home',
       redirect: '/layout/home/home1',
-      title: '首页',
-      icon: 'UploadOutlined',
+      label: '首页1',
+      icon: <MenuIcon src='icon-a-CombinedShape' type={3} />,
+      sicon: logo,
+      siconType: 2,
       element: <Outlet />,
       children: [
         {
           path: '/layout/home/home1',
           element: lazyload('views/home'),
-          title: '子菜单1',
+          label: '子菜单1',
           icon: logo,
+          sicon: <MenuIcon src='icon-a-CombinedShape' type={3} />,
           iconType: 2
         },
         {
           path: '/layout/home/home2',
           element: lazyload('views/home'),
-          title: '子菜单2',
+          label: '子菜单2',
           icon: 'icon-a-CombinedShape',
           iconType: 3
         }
@@ -50,8 +54,9 @@ export const menuRoute: ExRouteObject = {
     {
       path: '/layout/home2',
       redirect: '/layout/home2/home1',
-      title: '首页2',
+      label: '首页2',
       icon: logo,
+      sicon: <MenuIcon src='icon-a-CombinedShape' type={3} />,
       iconType: 2,
       iconClass: 'iconClassTest',
       element: <Outlet />,
@@ -59,21 +64,22 @@ export const menuRoute: ExRouteObject = {
         {
           path: '/layout/home2/home1',
           element: lazyload('views/home'),
-          title: '子菜单1',
+          label: '子菜单1',
           icon: logo,
-          iconType: 2
+          iconType: 2,
+          sicon: <MenuIcon src='icon-a-CombinedShape' type={3} />
         },
         {
           path: '/layout/home2/home2',
           element: lazyload('views/home'),
-          title: '子菜单2',
+          label: '子菜单2',
           icon: 'icon-a-CombinedShape',
           iconType: 3
         },
         {
           path: '/layout/home2/home3',
           element: lazyload('views/home'),
-          title: '子菜单3',
+          label: '子菜单3',
           icon: 'UploadOutlined',
           hidden: true
         }
@@ -82,7 +88,7 @@ export const menuRoute: ExRouteObject = {
     {
       path: '/layout/home3',
       redirect: '/layout/home3/home1',
-      title: '首页3',
+      label: '首页3',
       icon: require('@/assets/dzm.jpg'),
       iconType: 2,
       element: <Outlet />,
@@ -90,14 +96,14 @@ export const menuRoute: ExRouteObject = {
         {
           path: '/layout/home3/home1',
           element: lazyload('views/home'),
-          title: '子菜单1',
+          label: '子菜单1',
           icon: logo,
           iconType: 2
         },
         {
           path: '/layout/home3/home2',
           element: lazyload('views/home'),
-          title: '子菜单2',
+          label: '子菜单2',
           icon: 'icon-a-CombinedShape',
           iconType: 3
         }

@@ -6,7 +6,7 @@ import * as icons from '@ant-design/icons'
  */
 export type IconProps = {
   /**
-   * @description: Icon 名称
+   * @description: Icon 名称，例如：<UploadOutlined /> 取 'UploadOutlined' 作为图标名称
    */
   name: string,
   /**

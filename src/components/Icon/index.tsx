@@ -29,7 +29,7 @@ export type IconProps = {
    * @IconType_img : 传入 img 标签 src 属性所支持的图片内容
    * @IconType_iconfont : 传入 iconfont 图标的 font class 作为图标展示
    */
-  src?: any,
+  src?: string,
   /**
    * @description: 图标类型
    * @default: IconType.antdv
@@ -40,7 +40,7 @@ export type IconProps = {
    */
   className?: string,
   /**
-   * @description: 图标描述，IconType
+   * @description: 图标描述，IconType.img
    * @return {*}
    */  
   alt?: string
@@ -59,7 +59,7 @@ const Component = (props: IconProps) => {
       return <Iconfont name={props.src} className={className}></Iconfont>
     } else if (type === 2) {
       // img
-      return <img src={props.src} className={className} alt='' />
+      return <img src={props.src} className={className} alt={props.alt || ''} />
     } else {
       // antdv
       return <Icon name={props.src} className={className}></Icon>

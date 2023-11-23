@@ -33,11 +33,15 @@ const ComponentLayout: React.FC = () => {
           //     key: '1',
           //     icon: <MenuIcon src='icon-a-CombinedShape' type={3} />,
           //     label: 'nav 1',
+          //     title: '121212',
+          //     sicon: <MenuIcon src={require('@/assets/dzm.jpg')} type={2} />
           //   },
           //   {
           //     key: '/layout/home',
           //     icon: <MenuIcon src={require('@/assets/dzm.jpg')} type={2} />,
+          //     sicon: 'UploadOutlined',
           //     label: 'nav 2',
+          //     title: '121212',
           //     children: [
           //       {
           //         key: '21',
@@ -47,9 +51,23 @@ const ComponentLayout: React.FC = () => {
           //     ]
           //   },
           //   {
+          //     key: '/layout/home2',
+          //     icon: <MenuIcon src={require('@/assets/dzm.jpg')} type={2} />,
+          //     label: 'nav 2',
+          //     title: '121212',
+          //     children: [
+          //       {
+          //         key: '212',
+          //         icon: <MenuIcon src='icon-a-CombinedShape' type={3} />,
+          //         label: 'nav 212',
+          //       },
+          //     ]
+          //   },
+          //   {
           //     key: '3',
-          //     icon: <MenuIcon src='UploadOutlined' />,
+          //     icon: 'UploadOutlined',
           //     label: 'nav 3',
+          //     hidden: true
           //   }
           // ]}
         />
