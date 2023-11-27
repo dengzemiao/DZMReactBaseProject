@@ -18,6 +18,20 @@ interface ExRouteObjectProps extends Omit<MenuItemTypeProps, 'children'> {
 }
 
 /**
+ * @description: 扩展属性
+ */
+interface ExRouteObjectProps {
+  /**
+   * @description: 重定向路由地址
+   */
+  redirect?: string,
+  /**
+   * @description: 子列表
+   */  
+  children?: ExRouteObject[]
+}
+
+/**
  * @description: 扩展 IndexRouteObject
  */
 export interface ExIndexRouteObject extends Omit<IndexRouteObject, 'children'>, ExRouteObjectProps {
