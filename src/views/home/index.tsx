@@ -1,7 +1,7 @@
-import './index.less'
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { getDemo } from '@/api/request'
+import './index.less'
 
 const Component = () => {
   // 接口数据

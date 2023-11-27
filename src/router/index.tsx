@@ -1,4 +1,5 @@
 import React from 'react'
+import { ExRouteObject } from './ExRouter'
 import { Navigate } from 'react-router-dom'
 import BeforeEach from './BeforeEach'
 import ExRouter from './ExRouter'
@@ -16,7 +17,27 @@ const lazyload = (path: string) => {
 }
 
 // 基础路由
-const baseRoutes: Record<string, any>[] = [
+const menuRoute: ExRouteObject = {
+  path: '/layout',
+  redirect: '/layout/home',
+  element: lazyload('layouts/BaseLayout'),
+  children: [
+    {
+      path: '/layout/home',
+      redirect: '/layout/home/home1',
+      element: lazyload('views/home'),
+      children: [
+        {
+          path: '/layout/home/home1',
+          element: lazyload('views/home')
+        }
+      ]
+    }
+  ]
+}
+// 路由列表
+const routes: Record<string, any>[] = [
+  menuRoute,
   {
     path: '/home',
     element: lazyload('views/home'),
@@ -25,29 +46,6 @@ const baseRoutes: Record<string, any>[] = [
     path: '/user',
     element: lazyload('views/user'),
   },
-  {
-    path: '/layout',
-    redirect: '/layout/home',
-    element: lazyload('layouts/BaseLayout'),
-    children: [
-      {
-        path: '/layout/home',
-        redirect: '/layout/home/home1',
-        element: lazyload('views/home'),
-        children: [
-          {
-            path: '/layout/home/home1',
-            element: lazyload('views/home')
-          }
-        ]
-      }
-    ]
-  }
-]
-
-// 路由列表
-const routes: Record<string, any>[] = [
-  ...baseRoutes,
   {
     path: "/404",
     element: (<>页面地址不存在</>),
